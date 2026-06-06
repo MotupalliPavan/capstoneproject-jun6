@@ -300,3 +300,53 @@ spec:
 
 k8s cluster run command kubectl get po and see if pod is running or not.
 
+================================================================
+
+
+Monitoring --> 
+
+Prometheus and grafana 
+
+1. Install prometheus 
+2. install grafana
+3. open grafana dashboard and add prometheus as a data source 
+4. start visualizing data on grafana dashboards.
+
+
+
+
+Prometheus and Grafana
+ 
+helm repo add prometheus-repo https://prometheus-community.github.io/helm-charts
+helm repo add grafana-repo https://grafana.github.io/helm-charts 
+helm install myprometheus prometheus-repo/prometheus
+helm install mygrafana grafana-repo/grafana
+
+Check output of grafana to get admin password of grafana dashboard, something like below
+
+NAME: grafana
+LAST DEPLOYED: Sun Feb 28 01:48:49 2021
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+1. Get your 'admin' user password by running:
+   kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+
+2. The Grafana server can be accessed via port 80 on the following DNS name from within your cluster:
+   grafana.default.svc.cluster.local
+
+Password --> kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+
+kubectl expose po mygrafana-56dffbcd6d-lhv87 --type=LoadBalancer --port 80 --target-port 3000
+
+ADD Prometheus as a data source to Grafana by logging on grafana dashboard and use grafana dashboard to see metrics
+Dashboard id 6417 can be used
+
+================================================================================================================
+
+
+
+
+
+
+
