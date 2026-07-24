@@ -58,7 +58,17 @@ pipeline {
             }
         }
 
-        stage('Terraform Apply') {
+       stage('OWASP Dependency-Check') {
+ 	   steps {
+        	dependencyCheck(
+            odcInstallation: 'DependencyCheck',
+            additionalArguments: "--scan ${WORKSPACE} --format XML"
+        )
+        
+	dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+    }
+}	 
+	stage('Terraform Apply') {
             steps {
                 dir("${TF_DIR}") {
                     sh 'terraform apply -auto-approve'
