@@ -3,6 +3,8 @@ pipeline {
 
     environment {
         TF_DIR = "terraform"
+        IMAGE_NAME = "artifact11"
+        IMAGE_TAG = "latest"
     }
 
     stages {
@@ -66,9 +68,21 @@ pipeline {
             }
         }
 
+        stage('Build WAR') {
+            steps {
+                sh 'mvn clean package -DskipTests'
+            }
+        }
+
+        stage('Verify WAR') {
+            steps {
+                sh 'ls -lh target'
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t artifact11:latest .'
+                sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .'
             }
         }
 
@@ -76,7 +90,10 @@ pipeline {
             steps {
                 sh '''
                     docker rm -f artifact11 || true
-                    docker run -d -p 8081:8080 --name artifact11 artifact11:latest
+                    docker run -d \
+                        --name artifact11 \
+                        -p 8081:8080 \
+                        artifact11:latest
                 '''
             }
         }
@@ -89,6 +106,10 @@ pipeline {
 
         failure {
             echo 'Pipeline failed.'
+        }
+
+        always {
+            sh 'docker ps -a || true'
         }
     }
 }
