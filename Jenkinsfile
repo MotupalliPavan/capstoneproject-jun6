@@ -91,7 +91,7 @@ pipeline {
                 sh '''
                     docker rm -f artifact11 || true
                     docker run -d \
-		    	-p 8080:8080 \
+		    	-p 8081:8080 \
                         --name artifact11 \
                         artifact11:latest
                 '''
