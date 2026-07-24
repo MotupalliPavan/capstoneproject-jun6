@@ -58,16 +58,15 @@ pipeline {
             }
         }
 
-	stage('Terraform Apply') {
+        stage('Terraform Apply') {
             steps {
                 dir("${TF_DIR}") {
                     sh 'terraform apply -auto-approve'
                 }
             }
         }
-    }
 
-    stage('Build Docker Image') {
+        stage('Build Docker Image') {
             steps {
                 sh 'docker build -t artifact11:latest .'
             }
