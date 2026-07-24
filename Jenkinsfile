@@ -60,11 +60,13 @@ pipeline {
 
        stage('OWASP Dependency-Check') {
  	   steps {
-        	dependencyCheck(
-            odcInstallation: 'DependencyCheck',
-            additionalArguments: "--scan ${WORKSPACE} --format XML"
-        )
-        
+        	sh'''
+		/opt/dependency-check-tool/bin/dependency-check.sh \
+            		--project Capstone \
+			--scan . \
+			--out dependency-check-report
+		'''
+                   
 	dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
     }
 }	 
