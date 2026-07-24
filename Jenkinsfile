@@ -46,10 +46,15 @@ pipeline {
 
         stage('Checkov Scan') {
             steps {
-                dir('terraform') {
+                dir("${TF_DIR}") {
                     sh '/opt/checkov-venv/bin/checkov -d . --soft-fail'
                 }
-            
+            }
+        }
+
+        stage('OPA Policy Check') {
+            steps {
+                sh 'opa eval --data opa/policy.rego "data.terraform.security.allow"'
             }
         }
 
