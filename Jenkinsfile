@@ -42,8 +42,13 @@ pipeline {
                     sh 'terraform plan'
                 }
             }
+        stage('Checkov Scan') {
+    steps {
+        dir('terraform') {
+            sh 'checkov -d .'
         }
-
+    }
+}
         stage('Terraform Apply') {
             steps {
                 dir("${TF_DIR}") {
@@ -56,7 +61,7 @@ pipeline {
     post {
         success {
             echo 'Pipeline completed successfully.'
-        }
+i        }
 
         failure {
             echo 'Pipeline failed.'
