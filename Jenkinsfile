@@ -47,8 +47,9 @@ pipeline {
         stage('Checkov Scan') {
             steps {
                 dir('terraform') {
-                    sh 'checkov -d .'
+                    sh '/opt/checkov-venv/bin/checkov -d .'
                 }
+            
             }
         }
 
