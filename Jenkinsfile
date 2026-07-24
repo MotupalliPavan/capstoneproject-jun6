@@ -58,18 +58,6 @@ pipeline {
             }
         }
 
-       stage('OWASP Dependency-Check') {
- 	   steps {
-        	sh'''
-		/opt/dependency-check-tool/bin/dependency-check.sh \
-            		--project Capstone \
-			--scan . \
-			--out dependency-check-report
-		'''
-                   
-	dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-    }
-}	 
 	stage('Terraform Apply') {
             steps {
                 dir("${TF_DIR}") {
